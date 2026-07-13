@@ -1,6 +1,7 @@
 from ultralytics import YOLO
 import cv2
 import json
+from ml_pipeline import DataCollector, PlacementPredictor, train_and_evaluate
 
 # Load YOLO model
 model = YOLO("yolov8s.pt")
@@ -16,6 +17,10 @@ try:
         learned_rules = json.load(f)
 except:
     learned_rules = {}
+
+# Initialize ML pipeline
+data_collector = DataCollector("usage_data.csv")
+predictor = PlacementPredictor("placement_model.pkl", "label_encoder.pkl")
 
 # Default fallback rules
 default_rules = {
@@ -92,6 +97,17 @@ while True:
         with open("learned_rules.json","w") as f:
             json.dump(learned_rules,f)
         print("RESET")
+
+    elif key == ord('t'):
+        print("RETRAINING MODEL...")
+        try:
+            metrics = train_and_evaluate("usage_data.csv", "placement_model.pkl",
+                                          "label_encoder.pkl", "metrics.json")
+            predictor.load_model()
+            print(f"Retraining complete! Accuracy: {metrics['accuracy']:.4f}")
+        except Exception as e:
+            print(f"Retraining failed: {e}")
+
     elif key==27:
         break
 
@@ -115,6 +131,7 @@ while True:
 
             cls = int(box.cls)
             label = model.names[cls]
+            det_conf = float(box.conf[0])
 
             x1,y1,x2,y2 = map(int, box.xyxy[0])
 
@@ -158,6 +175,19 @@ while True:
 
                             learned_rules[label] = s_name
 
+                            # Log positive sample (object IS on this surface)
+                            data_collector.log_sample(
+                                label, s_name, (x1,y1,x2,y2), s_box,
+                                det_conf, frame.shape[:2], is_positive=True
+                            )
+                            # Log negative samples for other surfaces
+                            for other_name, other_box in surface_boxes.items():
+                                if other_name != s_name:
+                                    data_collector.log_sample(
+                                        label, other_name, (x1,y1,x2,y2), other_box,
+                                        det_conf, frame.shape[:2], is_positive=False
+                                    )
+
                             print(f"Learned: {label} -> {s_name}")
 
                             learn_text = f"LEARNING: {label}"
@@ -187,11 +217,20 @@ while True:
 
                             break
 
-                # PREDICTION MODE
-                if label in learned_rules:
-                    expected_surface = learned_rules[label]
-                else:
-                    expected_surface = None
+                # PREDICTION MODE — ML prediction with fallback
+                expected_surface = None
+                if predictor.is_loaded and surface_boxes:
+                    predicted, confidence = predictor.predict(
+                        label, surface_boxes, (x1,y1,x2,y2), det_conf, frame.shape[:2]
+                    )
+                    if predicted is not None:
+                        expected_surface = predicted
+                # Fallback to learned rules / default rules if ML has no answer
+                if expected_surface is None:
+                    if label in learned_rules:
+                        expected_surface = learned_rules[label]
+                    elif label in default_rules:
+                        expected_surface = default_rules[label]
 
                 correct = False
 

@@ -1,0 +1,125 @@
+{
+  "total_samples": 490,
+  "train_samples": 392,
+  "test_samples": 98,
+  "n_classes": 5,
+  "classes": [
+    "__none__",
+    "bed",
+    "chair",
+    "sofa",
+    "table"
+  ],
+  "accuracy": 1.0,
+  "precision": 1.0,
+  "recall": 1.0,
+  "f1_score": 1.0,
+  "confusion_matrix": [
+    [
+      26,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      5,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      13,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      2,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      52
+    ]
+  ],
+  "classification_report": {
+    "__none__": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 26.0
+    },
+    "bed": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 5.0
+    },
+    "chair": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 13.0
+    },
+    "sofa": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 2.0
+    },
+    "table": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 52.0
+    },
+    "accuracy": 1.0,
+    "macro avg": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 98.0
+    },
+    "weighted avg": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 98.0
+    }
+  },
+  "cross_val_mean": 0.9735,
+  "cross_val_std": 0.0247,
+  "cross_val_scores": [
+    0.9388,
+    0.9898,
+    1.0,
+    0.9898,
+    0.949
+  ],
+  "feature_importance": {
+    "object_class": 0.0369,
+    "surface_class": 0.2857,
+    "object_conf": 0.0149,
+    "object_area_ratio": 0.0333,
+    "surface_area_ratio": 0.108,
+    "area_ratio": 0.0566,
+    "overlap_ratio": 0.2034,
+    "dx_normalized": 0.0389,
+    "dy_normalized": 0.0848,
+    "euclidean_dist_normalized": 0.0525,
+    "obj_center_x_in_surface": 0.0561,
+    "obj_center_y_in_surface": 0.0067,
+    "vertical_position_ratio": 0.0222
+  },
+  "avg_prediction_confidence": 0.9353,
+  "last_retrain_time": "22:18:00"
+}

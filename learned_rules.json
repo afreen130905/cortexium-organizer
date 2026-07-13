@@ -1,1 +1,22 @@
-{"cake": "table", "book": "table", "remote": "table", "bottle": "table", "cell phone": "table"}
+{
+  "backpack": "bed",
+  "cell phone": "table",
+  "bottle": "table",
+  "book": "bed",
+  "banana": "table",
+  "handbag": "chair",
+  "person": "bed",
+  "remote": "bed",
+  "laptop": "sofa",
+  "baseball glove": "table",
+  "keyboard": "table",
+  "mouse": "table",
+  "scissors": "table",
+  "cat": "bed",
+  "bird": "bed",
+  "teddy bear": "bed",
+  "suitcase": "chair",
+  "dog": "chair",
+  "cup": "table",
+  "bowl": "sofa"
+}
