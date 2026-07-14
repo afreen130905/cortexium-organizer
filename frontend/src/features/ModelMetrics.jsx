@@ -1,194 +1,233 @@
 import React from 'react';
 import { GlassCard } from '../components/GlassCard';
-import {
-  RadarChart, Radar, PolarGrid, PolarAngleAxis, ResponsiveContainer,
-  Tooltip,
-} from 'recharts';
-import { BarChart2 } from 'lucide-react';
+import { BarChart2, Info } from 'lucide-react';
 
-/** Single metric bar row */
-function MetricBar({ label, value, color }) {
+// ─────────────────────────────────────────────────────
+// Column 1: Metric progress bars
+// ─────────────────────────────────────────────────────
+const METRIC_DEFS = [
+  { key: 'accuracy',  label: 'Accuracy',              color: '#22c55e', bg: 'rgba(34,197,94,0.12)' },
+  { key: 'precision', label: 'Precision',             color: '#f97316', bg: 'rgba(249,115,22,0.12)' },
+  { key: 'recall',    label: 'Recall',                color: '#64748b', bg: 'rgba(100,116,139,0.12)' },
+  { key: 'f1Score',   label: 'F1 Score',              color: '#374151', bg: 'rgba(55,65,81,0.12)' },
+  { key: 'cvScore',   label: 'Cross Val Score',       color: '#6b7280', bg: 'rgba(107,114,128,0.12)' },
+];
+
+function MetricBar({ label, value, color, bg }) {
   const pct = Math.round((value ?? 0) * 100);
   return (
-    <div className="flex items-center gap-3">
-      <span className="text-xs text-slate-400 w-24 shrink-0">{label}</span>
-      <div className="flex-1 progress-track">
+    <div className="mb-4">
+      <div className="flex items-center justify-between mb-1.5">
+        <span className="text-xs font-medium text-slate-300">{label}</span>
+        <span className="text-sm font-bold tabular-nums text-slate-100">{pct}%</span>
+      </div>
+      <div className="progress-track">
         <div
           className="h-full rounded-full transition-all duration-700"
-          style={{ width: `${pct}%`, background: color }}
+          style={{ width: `${pct}%`, background: color, boxShadow: `0 0 8px ${color}40` }}
         />
       </div>
-      <span className="text-xs font-semibold tabular-nums text-slate-200 w-9 text-right">
-        {pct}%
-      </span>
     </div>
   );
 }
 
-/** Confusion matrix mini-grid */
+// ─────────────────────────────────────────────────────
+// Column 2: Confusion matrix
+// ─────────────────────────────────────────────────────
 function ConfusionMatrix({ matrix, classes }) {
-  if (!matrix || matrix.length === 0) return null;
+  if (!matrix || matrix.length === 0) {
+    return (
+      <div className="flex items-center justify-center h-full text-gray-300 text-xs">
+        No data yet
+      </div>
+    );
+  }
   const maxVal = Math.max(...matrix.flat(), 1);
+  const labels = classes || matrix[0].map((_, i) => `C${i}`);
 
   return (
-    <div className="mt-3">
-      <p className="text-[10px] text-slate-500 uppercase tracking-wider mb-2">Confusion Matrix</p>
-      <div className="overflow-auto">
-        <table className="text-[10px] border-collapse w-full">
-          <thead>
-            <tr>
-              <th className="w-8" />
-              {(classes || matrix[0].map((_, i) => `C${i}`)).map((c, i) => (
-                <th key={i} className="px-1 py-0.5 text-slate-500 font-normal text-center capitalize truncate max-w-[48px]">
-                  {String(c).slice(0, 6)}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {matrix.map((row, ri) => (
-              <tr key={ri}>
-                <td className="pr-1 text-slate-500 font-normal capitalize truncate max-w-[48px]">
-                  {classes ? String(classes[ri]).slice(0, 6) : `R${ri}`}
-                </td>
-                {row.map((val, ci) => {
-                  const intensity = val / maxVal;
-                  const bg = ri === ci
-                    ? `rgba(34, 197, 94, ${0.1 + intensity * 0.5})`
-                    : `rgba(239, 68, 68, ${intensity * 0.4})`;
-                  return (
-                    <td
-                      key={ci}
-                      className="text-center font-mono px-1 py-1 rounded"
-                      style={{ background: bg, color: val > 0 ? '#e2e8f0' : '#475569' }}
-                    >
-                      {val}
-                    </td>
-                  );
-                })}
-              </tr>
+    <div className="overflow-auto">
+      <table className="text-xs border-collapse w-full" style={{ minWidth: `${(labels.length + 1) * 52}px` }}>
+        <thead>
+          <tr>
+            {/* top-left empty corner */}
+            <th className="p-1 text-[10px] text-gray-400 font-normal text-right pr-2">Actual →</th>
+            {labels.map((c, i) => (
+              <th key={i} className="p-1 text-[10px] font-medium text-slate-400 text-center capitalize">
+                {String(c).length > 6 ? String(c).slice(0, 5) + '…' : c}
+              </th>
             ))}
-          </tbody>
-        </table>
-      </div>
+          </tr>
+        </thead>
+        <tbody>
+          {matrix.map((row, ri) => (
+            <tr key={ri}>
+              <td className="pr-2 py-1 text-[10px] font-medium text-slate-400 capitalize text-right">
+                {labels[ri] && (String(labels[ri]).length > 6 ? String(labels[ri]).slice(0, 5) + '…' : labels[ri])}
+              </td>
+              {row.map((val, ci) => {
+                const intensity = val / maxVal;
+                const isDiag = ri === ci;
+                const bg = isDiag
+                  ? `rgba(34,197,94,${0.08 + intensity * 0.55})`
+                  : `rgba(239,68,68,${intensity * 0.35})`;
+                const textColor = val > 0 ? (isDiag ? '#166534' : '#991b1b') : '#d1d5db';
+                return (
+                  <td
+                    key={ci}
+                    className="text-center font-mono font-semibold py-1.5 px-1 rounded text-sm"
+                    style={{ background: bg, color: textColor, minWidth: '44px' }}
+                    title={`Predicted: ${labels[ci]}, Actual: ${labels[ri]} → ${val}`}
+                  >
+                    {val}
+                  </td>
+                );
+              })}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <p className="text-[10px] text-gray-400 mt-2 text-center">
+        ↕ Predicted (rows) vs Actual (cols)
+      </p>
     </div>
   );
 }
 
-/** Feature importance horizontal bars */
+// ─────────────────────────────────────────────────────
+// Column 3: Feature importance
+// ─────────────────────────────────────────────────────
 function FeatureImportance({ importance }) {
-  if (!importance || Object.keys(importance).length === 0) return null;
+  if (!importance || Object.keys(importance).length === 0) {
+    return (
+      <div className="flex items-center justify-center h-full text-gray-300 text-xs">
+        No data yet
+      </div>
+    );
+  }
+
   const sorted = Object.entries(importance)
-    .sort(([, a], [, b]) => b - a)
-    .slice(0, 7);
+    .sort(([, a], [, b]) => b - a);
   const max = sorted[0]?.[1] ?? 1;
 
+  const colors = [
+    '#f97316', '#ea580c', '#6b7280', '#9ca3af',
+    '#374151', '#4b5563', '#64748b', '#94a3b8',
+    '#d1d5db', '#e5e7eb', '#f3f4f6', '#111827', '#374151',
+  ];
+
   return (
-    <div className="mt-3">
-      <p className="text-[10px] text-slate-500 uppercase tracking-wider mb-2">Feature Importance</p>
-      <div className="space-y-1.5">
-        {sorted.map(([name, val]) => (
-          <div key={name} className="flex items-center gap-2">
-            <span className="text-[10px] text-slate-500 w-28 truncate shrink-0">{name.replace(/_/g, ' ')}</span>
-            <div className="flex-1 h-1 bg-white/5 rounded-full overflow-hidden">
+    <div className="space-y-2.5">
+      {sorted.map(([name, val], idx) => {
+        const pct = (val / max) * 100;
+        const color = colors[idx % colors.length];
+        return (
+          <div key={name}>
+            <div className="flex items-center justify-between mb-1">
+              <span className="text-xs text-slate-300 truncate max-w-[140px]" title={name.replace(/_/g, ' ')}>
+                {name.replace(/_/g, ' ')}
+              </span>
+              <span className="text-xs font-semibold text-white font-mono ml-2 shrink-0">
+                {(val * 100).toFixed(1)}%
+              </span>
+            </div>
+            <div className="progress-track">
               <div
-                className="h-full rounded-full bg-slate-400/60"
-                style={{ width: `${(val / max) * 100}%` }}
+                className="h-full rounded-full transition-all duration-700"
+                style={{ width: `${pct}%`, background: color }}
               />
             </div>
-            <span className="text-[10px] text-slate-500 font-mono w-8 text-right">{(val * 100).toFixed(1)}</span>
           </div>
-        ))}
-      </div>
+        );
+      })}
     </div>
   );
 }
 
-const METRIC_COLORS = {
-  Accuracy:   'linear-gradient(90deg, #22c55e, #4ade80)',
-  Precision:  'linear-gradient(90deg, #f97316, #fb923c)',
-  Recall:     'linear-gradient(90deg, #38bdf8, #7dd3fc)',
-  'F1 Score': 'linear-gradient(90deg, #a78bfa, #c4b5fd)',
-  'CV Score': 'linear-gradient(90deg, #94a3b8, #cbd5e1)',
-};
-
+// ─────────────────────────────────────────────────────
+// Main component
+// ─────────────────────────────────────────────────────
 export function ModelMetrics({ metrics }) {
-  const metricRows = [
-    { label: 'Accuracy',  value: metrics?.accuracy  },
-    { label: 'Precision', value: metrics?.precision },
-    { label: 'Recall',    value: metrics?.recall    },
-    { label: 'F1 Score',  value: metrics?.f1Score   },
-    { label: 'CV Score',  value: metrics?.cvScore   },
-  ];
+  const hasData = METRIC_DEFS.some(m => (metrics?.[m.key] ?? 0) > 0);
 
-  const radarData = metricRows.map(m => ({
-    metric: m.label,
-    value: Math.round((m.value ?? 0) * 100),
-  }));
-
-  const hasData = metricRows.some(m => (m.value ?? 0) > 0);
+  // Detect if metrics look artificially perfect (all top-4 are 1.0)
+  const allPerfect = hasData && METRIC_DEFS.slice(0, 4).every(m => (metrics?.[m.key] ?? 0) >= 1.0);
+  const cvScore = metrics?.cvScore ?? 0;
 
   return (
-    <GlassCard className="flex flex-col gap-4" accent="#a78bfa">
-      {/* Header */}
-      <div className="flex items-center gap-2">
-        <BarChart2 className="w-4 h-4 text-purple-400/70" />
-        <span className="text-sm font-semibold text-slate-200">Model Performance</span>
+    <div className="w-full">
+      {/* Section header */}
+      <div className="flex items-center gap-2 mb-4">
+        <BarChart2 className="w-4 h-4 text-slate-400" />
+        <span className="text-base font-bold text-slate-100">Model Performance</span>
         {!hasData && (
-          <span className="ml-auto text-[10px] text-slate-600">Run retrain to populate</span>
+          <span className="ml-auto text-[10px] text-gray-400 italic">Run retrain to populate</span>
+        )}
+        {/* Explain the 100% if relevant */}
+        {allPerfect && (
+          <div className="ml-auto flex items-center gap-1.5 text-[10px] text-amber-600 bg-amber-50 border border-amber-200 px-2 py-1 rounded-full">
+            <Info className="w-3 h-3 shrink-0" />
+            Test-set 100% — CV: {Math.round(cvScore * 100)}% (small dataset overfitting)
+          </div>
         )}
       </div>
 
-      {/* Radar chart */}
-      {hasData && (
-        <div className="h-44 w-full">
-          <ResponsiveContainer width="100%" height="100%">
-            <RadarChart data={radarData} outerRadius="65%">
-              <PolarGrid stroke="rgba(255,255,255,0.06)" />
-              <PolarAngleAxis
-                dataKey="metric"
-                tick={{ fill: '#6b7280', fontSize: 10 }}
-              />
-              <Radar
-                dataKey="value"
-                stroke="rgba(167,139,250,0.6)"
-                fill="rgba(167,139,250,0.12)"
-                strokeWidth={1.5}
-              />
-              <Tooltip
-                contentStyle={{ background: '#0f172a', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 8 }}
-                itemStyle={{ color: '#e2e8f0', fontSize: 11 }}
-                formatter={(v) => [`${v}%`, '']}
-              />
-            </RadarChart>
-          </ResponsiveContainer>
-        </div>
-      )}
+      {/* Three-column grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
 
-      {/* Progress bars */}
-      <div className="space-y-2.5">
-        {metricRows.map((m) => (
-          <MetricBar
-            key={m.label}
-            label={m.label}
-            value={m.value}
-            color={METRIC_COLORS[m.label]}
+        {/* ── Column 1: Score bars ── */}
+        <GlassCard className="flex flex-col">
+          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-4">Evaluation Scores</p>
+          {hasData ? (
+            <div>
+              {METRIC_DEFS.map((m) => (
+                <MetricBar
+                  key={m.key}
+                  label={m.label}
+                  value={metrics?.[m.key]}
+                  color={m.color}
+                  bg={m.bg}
+                />
+              ))}
+              {/* Sample info */}
+              <div className="mt-2 pt-3 text-[10px] text-gray-400 space-y-1" style={{ borderTop: '1px solid rgba(0,0,0,0.06)' }}>
+                {metrics?.totalSamples && (
+                  <div className="flex justify-between">
+                    <span>Train / Test</span>
+                    <span className="font-mono">{metrics.trainSamples ?? '—'} / {metrics.testSamples ?? '—'}</span>
+                  </div>
+                )}
+                <div className="flex justify-between">
+                  <span>Classes</span>
+                  <span className="font-mono">{metrics?.classes?.length ?? '—'}</span>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="flex-1 flex items-center justify-center text-gray-300 text-xs">
+              No metrics available
+            </div>
+          )}
+        </GlassCard>
+
+        {/* ── Column 2: Confusion matrix ── */}
+        <GlassCard className="flex flex-col">
+          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-4">Confusion Matrix</p>
+          <ConfusionMatrix
+            matrix={metrics?.confusionMatrix}
+            classes={metrics?.classes}
           />
-        ))}
+        </GlassCard>
+
+        {/* ── Column 3: Feature importance ── */}
+        <GlassCard className="flex flex-col">
+          <div className="max-h-[320px] overflow-y-auto pr-2">
+          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-4">Feature Importance</p>
+          <FeatureImportance importance={metrics?.featureImportance} />
+          </div>
+        </GlassCard>
+
       </div>
-
-      {/* Confusion matrix */}
-      {metrics?.confusionMatrix && (
-        <ConfusionMatrix
-          matrix={metrics.confusionMatrix}
-          classes={metrics.classes}
-        />
-      )}
-
-      {/* Feature importance */}
-      {metrics?.featureImportance && (
-        <FeatureImportance importance={metrics.featureImportance} />
-      )}
-    </GlassCard>
+    </div>
   );
 }

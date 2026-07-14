@@ -4,23 +4,28 @@ import { ScanSearch } from 'lucide-react';
 
 function StatusDot({ status }) {
   if (status === 'Correct') {
-    return <span className="inline-flex items-center gap-1.5 text-green-400 text-xs font-medium">
-      <span className="w-1.5 h-1.5 rounded-full bg-green-400" /> Correct
-    </span>;
+    return (
+      <span className="inline-flex items-center gap-1.5 text-green-700 text-xs font-medium">
+        <span className="w-1.5 h-1.5 rounded-full bg-green-500" /> Correct
+      </span>
+    );
   }
-  return <span className="inline-flex items-center gap-1.5 text-red-400 text-xs font-medium">
-    <span className="w-1.5 h-1.5 rounded-full bg-red-400" /> Misplaced
-  </span>;
+  return (
+    <span className="inline-flex items-center gap-1.5 text-red-600 text-xs font-medium">
+      <span className="w-1.5 h-1.5 rounded-full bg-red-500" /> Misplaced
+    </span>
+  );
 }
 
 export function DetectedObjectsTable({ objects }) {
   return (
     <GlassCard className="flex flex-col h-full" accent="#f97316">
       <div className="flex items-center gap-2 mb-4">
-        <ScanSearch className="w-4 h-4 text-orange-400" />
-        <span className="text-sm font-semibold text-slate-200">Detected Objects</span>
+        <ScanSearch className="w-4 h-4 text-orange-500" />
+        <span className="text-sm font-semibold text-slate-100">Detected Objects</span>
         {objects?.length > 0 && (
-          <span className="ml-auto text-[10px] font-mono bg-white/5 border border-white/8 px-2 py-0.5 rounded-full text-slate-400">
+          <span className="ml-auto text-[10px] font-mono px-2 py-0.5 rounded-full text-slate-400"
+            style={{ background: 'rgba(0,0,0,0.06)', border: '1px solid rgba(0,0,0,0.08)' }}>
             {objects.length}
           </span>
         )}
@@ -30,7 +35,7 @@ export function DetectedObjectsTable({ objects }) {
         {objects?.length > 0 ? (
           <table className="w-full text-xs">
             <thead>
-              <tr className="text-slate-500 uppercase tracking-wider border-b border-white/5">
+              <tr className="text-gray-400 uppercase tracking-wider" style={{ borderBottom: '1px solid rgba(0,0,0,0.07)' }}>
                 <th className="text-left pb-2 font-medium">Object</th>
                 <th className="text-left pb-2 font-medium">Current</th>
                 <th className="text-left pb-2 font-medium">Expected</th>
@@ -38,17 +43,18 @@ export function DetectedObjectsTable({ objects }) {
                 <th className="text-right pb-2 font-medium">Status</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/4">
+            <tbody>
               {objects.map((obj, i) => (
-                <tr key={i} className="fade-in hover:bg-white/2 transition-colors">
-                  <td className="py-2.5 pr-2 font-medium text-slate-200 capitalize">{obj.name}</td>
-                  <td className="py-2.5 pr-2 text-orange-400/80 capitalize">{obj.currentSurface}</td>
+                <tr key={i} className="fade-in transition-colors hover:bg-black/[0.02]"
+                  style={{ borderBottom: '1px solid rgba(0,0,0,0.04)' }}>
+                  <td className="py-2.5 pr-2 font-medium text-slate-100 capitalize">{obj.name}</td>
+                  <td className="py-2.5 pr-2 text-orange-500 capitalize">{obj.currentSurface}</td>
                   <td className="py-2.5 pr-2 text-slate-400 capitalize">{obj.predictedSurface}</td>
                   <td className="py-2.5 pr-2 text-right">
                     <div className="flex items-center justify-end gap-1.5">
-                      <div className="w-12 h-1 bg-white/5 rounded-full overflow-hidden">
+                      <div className="w-12 h-1.5 rounded-full overflow-hidden" style={{ background: 'rgba(0,0,0,0.07)' }}>
                         <div
-                          className="h-full rounded-full bg-slate-400"
+                          className="h-full rounded-full bg-gray-400"
                           style={{ width: `${obj.confidence * 100}%` }}
                         />
                       </div>
@@ -65,9 +71,9 @@ export function DetectedObjectsTable({ objects }) {
             </tbody>
           </table>
         ) : (
-          <div className="flex flex-col items-center justify-center h-full gap-2 text-slate-600">
+          <div className="flex flex-col items-center justify-center h-full gap-2 text-gray-300">
             <ScanSearch className="w-8 h-8 opacity-30" />
-            <p className="text-xs">No objects detected</p>
+            <p className="text-xs text-gray-400">No objects detected</p>
           </div>
         )}
       </div>

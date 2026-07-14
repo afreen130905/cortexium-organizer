@@ -12,13 +12,15 @@
 
 @layer base {
   body {
-    @apply bg-[#080a0f] text-slate-200 antialiased font-sans;
+    @apply bg-[#1a1c22] text-slate-100 antialiased font-sans;
     font-feature-settings: "kern" 1, "liga" 1;
+    background: linear-gradient(135deg, #1a1c22 0%, #22242c 50%, #1e2028 100%);
+    min-height: 100vh;
   }
 
   * {
     scrollbar-width: thin;
-    scrollbar-color: rgba(255,255,255,0.08) transparent;
+    scrollbar-color: rgba(0,0,0,0.12) transparent;
   }
 
   *::-webkit-scrollbar {
@@ -31,39 +33,40 @@
   }
 
   *::-webkit-scrollbar-thumb {
-    background: rgba(255,255,255,0.08);
+    background: rgba(0,0,0,0.12);
     border-radius: 4px;
   }
 }
 
 @layer utilities {
-  /* Core glass panel */
+  /* ── White glassmorphism panel ── */
   .glass {
-    background: rgba(255, 255, 255, 0.03);
-    backdrop-filter: blur(24px) saturate(180%);
-    -webkit-backdrop-filter: blur(24px) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.07);
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 16px;
   }
 
-  /* Stronger glass for headers */
+  /* Stronger glass for header */
   .glass-strong {
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(40px) saturate(200%);
-    -webkit-backdrop-filter: blur(40px) saturate(200%);
-    border: 1px solid rgba(255, 255, 255, 0.09);
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(32px) saturate(180%);
+    -webkit-backdrop-filter: blur(32px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.10);
   }
 
-  /* Subtle inner shadow for depth */
-  .glass-inset {
+  /* Soft shadow for depth */
+  .glass-inset{
     box-shadow:
-      inset 0 1px 0 rgba(255,255,255,0.06),
-      0 4px 24px rgba(0,0,0,0.4);
+      inset 0 1px 0 rgba(255,255,255,.08),
+      0 12px 35px rgba(0,0,0,.28);
   }
 
   /* Progress bar base */
   .progress-track {
-    @apply w-full h-1.5 bg-white/5 rounded-full overflow-hidden;
+    @apply w-full h-2 rounded-full overflow-hidden;
+    background: rgba(0,0,0,0.07);
   }
 
   /* Glowing dot */
@@ -82,6 +85,19 @@
     @apply w-2 h-2 rounded-full bg-brand-red;
     box-shadow: 0 0 6px #ef4444;
   }
+
+  /* Text helpers */
+  .text-primary{
+      color:#f8fafc;
+  }
+
+  .text-secondary{
+      color:#cbd5e1;
+  }
+
+  .text-muted{
+      color:#94a3b8;
+  }
 }
 
 @keyframes pulse-live {
@@ -96,4 +112,17 @@
 
 .fade-in {
   animation: fadeSlideIn 0.3s ease forwards;
+}
+
+::-webkit-scrollbar{
+    width:6px;
+}
+
+::-webkit-scrollbar-thumb{
+    background:rgba(255,255,255,.08);
+    border-radius:999px;
+}
+
+::-webkit-scrollbar-track{
+    background:transparent;
 }

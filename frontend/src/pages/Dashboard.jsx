@@ -40,8 +40,8 @@ export function Dashboard() {
   }, [modelStatus]);
 
   // Prefer live data; fall back to initial HTTP fetch
-  const metrics = (liveMetrics && Object.keys(liveMetrics).length) ? liveMetrics : dashData.metrics;
-  const learningData = (liveLearning && liveLearning.datasetSize !== undefined) ? liveLearning : dashData.learningData;
+  const metrics      = (liveMetrics  && Object.keys(liveMetrics).length)                ? liveMetrics  : dashData.metrics;
+  const learningData = (liveLearning && liveLearning.datasetSize !== undefined)          ? liveLearning : dashData.learningData;
 
   const handleControlAction = useCallback(async (actionId) => {
     try {
@@ -64,27 +64,30 @@ export function Dashboard() {
     }
   }, []);
 
-  const headerMode     = mode === 'learn' ? 'Learn' : 'Predict';
-  const cameraStatus   = (connected && cameraActive) ? 'Connected' : 'Disconnected';
-  const streamUrl      = '/api/camera/stream';
+  const headerMode   = mode === 'learn' ? 'Learn' : 'Predict';
+  const cameraStatus = (connected && cameraActive) ? 'Connected' : 'Disconnected';
+  const streamUrl    = '/api/camera/stream';
 
   return (
     <DashboardLayout mode={headerMode} cameraStatus={cameraStatus} modelStatus={modelStatus}>
-      <div className="flex flex-col gap-4 h-full">
+      <div className="flex flex-col gap-5">
 
         {/* ── Connection banner ── */}
         {!connected && (
-          <div className="flex items-center gap-3 px-4 py-2.5 rounded-xl bg-orange-500/8 border border-orange-500/15 text-orange-400 text-xs">
-            <span className="w-1.5 h-1.5 rounded-full bg-orange-400 animate-pulse shrink-0" />
+          <div className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-orange-700 text-xs"
+            style={{ background: 'rgba(249,115,22,0.08)', border: '1px solid rgba(249,115,22,0.2)' }}>
+            <span className="w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse shrink-0" />
             Backend offline — start{' '}
-            <code className="font-mono bg-white/5 px-1.5 py-0.5 rounded">
+            <code className="font-mono px-1.5 py-0.5 rounded text-orange-700"
+              style={{ background: 'rgba(249,115,22,0.10)' }}>
               uvicorn server:app --port 8000
             </code>
           </div>
         )}
 
         {loadError && (
-          <div className="px-4 py-2.5 rounded-xl bg-red-500/8 border border-red-500/15 text-red-400 text-xs">
+          <div className="px-4 py-2.5 rounded-xl text-red-600 text-xs"
+            style={{ background: 'rgba(239,68,68,0.06)', border: '1px solid rgba(239,68,68,0.15)' }}>
             {loadError}
           </div>
         )}
@@ -94,14 +97,17 @@ export function Dashboard() {
           <Controls onAction={handleControlAction} mode={mode} cameraActive={cameraActive} />
         </div>
 
-        {/* ── Two-column layout ── */}
-        <div className="grid grid-cols-1 xl:grid-cols-[65%_35%] 2xl:grid-cols-[65%_35%] gap-4 flex-1 min-h-0">
+        {/* ══════════════════════════════════════════
+            SECTION 1 — Two-column live application
+            Left: 65%   Right: 35%
+        ══════════════════════════════════════════ */}
+        <div className="grid grid-cols-1 xl:grid-cols-[65%_35%] gap-4">
 
           {/* ════ LEFT COLUMN (65%) ════ */}
-          <div className="flex flex-col gap-4 min-h-0">
+          <div className="flex flex-col gap-4">
 
             {/* 1. Camera feed — largest element */}
-            <div className="flex-[3] min-h-[340px] max-h-[550px]">
+            <div style={{ minHeight: '360px', maxHeight: '520px', flex: '1 1 auto' }}>
               <CameraFeed
                 isConnected={connected && cameraActive}
                 streamUrl={streamUrl}
@@ -110,20 +116,19 @@ export function Dashboard() {
 
             {/* 2. Misplaced / prediction panel */}
             <div className="shrink-0">
-              <PredictionPanel misplacedObject={misplacedObject} cameraActive={cameraActive} connected={connected}/>
-            </div>
-
-            {/* 3. Model performance — always visible */}
-            <div className="flex-[2] min-h-0 overflow-auto">
-              <ModelMetrics metrics={metrics} />
+              <PredictionPanel
+                misplacedObject={misplacedObject}
+                cameraActive={cameraActive}
+                connected={connected}
+              />
             </div>
           </div>
 
           {/* ════ RIGHT COLUMN (35%) ════ */}
-          <div className="flex flex-col gap-4 min-h-0">
+          <div className="flex flex-col gap-4">
 
             {/* 1. Detected objects table */}
-            <div className="flex-1 min-h-[200px]">
+            <div className="flex-1" style={{ minHeight: '220px' }}>
               <DetectedObjectsTable objects={objects} />
             </div>
 
@@ -135,8 +140,15 @@ export function Dashboard() {
               />
             </div>
           </div>
-
         </div>
+
+        {/* ══════════════════════════════════════════
+            SECTION 2 — Full-width Model Performance
+        ══════════════════════════════════════════ */}
+        <div className="w-full">
+          <ModelMetrics metrics={metrics} />
+        </div>
+
       </div>
     </DashboardLayout>
   );

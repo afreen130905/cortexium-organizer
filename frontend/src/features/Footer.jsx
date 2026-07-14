@@ -2,7 +2,14 @@ import React from 'react';
 
 export function Footer() {
   return (
-    <footer className="flex items-center justify-between px-6 py-2.5 border-t border-white/5 bg-white/[0.01] text-[10px] text-slate-600 font-mono">
+    <footer
+      className="flex items-center justify-between px-6 py-2.5 text-[10px] font-mono"
+      style={{
+      background: "rgba(255,255,255,0.05)",
+      backdropFilter: "blur(18px)",
+      borderTop: "1px solid rgba(255,255,255,0.06)"
+      }}
+    >
       <div className="flex items-center gap-4">
         <span className="flex items-center gap-1.5">
           <span className="w-1.5 h-1.5 rounded-full bg-green-500" style={{ boxShadow: '0 0 4px #22c55e' }} />

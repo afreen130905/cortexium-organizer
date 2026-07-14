@@ -9,60 +9,69 @@ export function Header({ mode = 'Predict', cameraStatus = 'Disconnected', modelS
     return () => clearInterval(t);
   }, []);
 
-  const isLearn = mode === 'Learn';
-  const isCamOn = cameraStatus === 'Connected';
+  const isLearn    = mode === 'Learn';
+  const isCamOn    = cameraStatus === 'Connected';
   const isTraining = modelStatus === 'Training';
 
   return (
-    <header className="glass-strong glass-inset sticky top-0 z-50 flex items-center justify-between px-6 py-3 rounded-none border-x-0 border-t-0">
+    <header
+      className="sticky top-0 z-50 flex items-center justify-between px-6 py-3"
+      style={{
+      background: "rgba(255,255,255,0.08)",
+      backdropFilter: "blur(22px)",
+      WebkitBackdropFilter: "blur(22px)",
+      borderBottom: "1px solid rgba(255,255,255,0.08)"
+      }}
+    >
       {/* Brand */}
       <div className="flex items-center gap-3">
-        <div className="w-8 h-8 rounded-xl bg-white/8 border border-white/10 flex items-center justify-center">
+        <div className="w-8 h-8 rounded-xl flex items-center justify-center"
+          style={{ background: 'linear-gradient(135deg, #f97316, #fb923c)', boxShadow: '0 2px 8px rgba(249,115,22,0.3)' }}>
           <Brain className="w-4 h-4 text-white" />
         </div>
         <div>
           <p className="text-sm font-semibold text-white tracking-tight leading-none">Cortexium XR</p>
-          <p className="text-[10px] text-slate-500 leading-none mt-0.5">Adaptive AI Vision</p>
+          <p className="text-[10px] text-slate-300 leading-none mt-0.5">Adaptive AI Vision</p>
         </div>
       </div>
 
       {/* Status pills */}
       <div className="flex items-center gap-2">
         {/* Mode */}
-        <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-medium transition-colors ${
-          isLearn
-            ? 'bg-white/8 border-white/15 text-white'
-            : 'bg-white/4 border-white/8 text-slate-400'
-        }`}>
-          <span className={`w-1.5 h-1.5 rounded-full ${isLearn ? 'bg-white' : 'bg-slate-500'}`} />
+        <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-medium transition-colors backdrop-blur-md ${
+        isLearn
+          ? 'bg-orange-500/20 border-orange-400/30 text-orange-200'
+          : 'bg-white/10 border-white/10 text-slate-200'
+          }`}>
+          <span className={`w-1.5 h-1.5 rounded-full ${isLearn ? 'bg-orange-400' : 'bg-slate-300'}`} />
           {mode} Mode
         </div>
 
         {/* Camera */}
         <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-medium ${
           isCamOn
-            ? 'bg-green-500/10 border-green-500/20 text-green-400'
-            : 'bg-white/4 border-white/8 text-slate-500'
-        }`}>
-          <span className={`w-1.5 h-1.5 rounded-full ${isCamOn ? 'dot-live' : 'bg-slate-600'}`} />
+            ? 'bg-green-500/20 border-green-400/30 text-green-200'
+            : 'bg-white/10 border-white/10 text-slate-200'
+          }`}>
+          <span className={`w-1.5 h-1.5 rounded-full ${isCamOn ? 'dot-live' : 'bg-gray-300'}`} />
           Camera {cameraStatus}
         </div>
 
         {/* Model */}
         <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-medium ${
           isTraining
-            ? 'bg-orange-500/10 border-orange-500/20 text-orange-400'
-            : 'bg-white/4 border-white/8 text-slate-400'
-        }`}>
-          <span className={`w-1.5 h-1.5 rounded-full ${isTraining ? 'bg-orange-400 animate-pulse' : 'bg-slate-500'}`} />
+            ? 'bg-orange-500/20 border-orange-400/30 text-orange-200'
+            : 'bg-white/10 border-white/10 text-slate-200'
+          }`}>
+          <span className={`w-1.5 h-1.5 rounded-full ${isTraining ? 'bg-orange-400 animate-pulse' : 'bg-gray-300'}`} />
           {modelStatus}
         </div>
       </div>
 
       {/* Clock */}
-      <div className="flex items-center gap-2 text-slate-500">
+      <div className="flex items-center gap-2 text-gray-400">
         <Clock className="w-3.5 h-3.5" />
-        <span className="text-xs font-mono tabular-nums">
+        <span className="text-xs font-mono tabular-nums text-slate-400">
           {time.toLocaleTimeString([], { hour12: false })}
         </span>
       </div>

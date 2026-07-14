@@ -182,3 +182,16 @@
     border-right-color: var(--border);
   }
 }
+
+::-webkit-scrollbar{
+    width:6px;
+}
+
+::-webkit-scrollbar-thumb{
+    background:rgba(255,255,255,.18);
+    border-radius:999px;
+}
+
+::-webkit-scrollbar-track{
+    background:transparent;
+}

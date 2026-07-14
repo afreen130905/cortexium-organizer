@@ -2,14 +2,14 @@ import React from 'react';
 import { cn } from '../utils/cn';
 
 const variants = {
-  default:  'bg-white/5   text-slate-400  border-white/10',
-  orange:   'bg-orange-500/10 text-orange-400  border-orange-500/20',
-  green:    'bg-green-500/10  text-green-400   border-green-500/20',
-  red:      'bg-red-500/10    text-red-400     border-red-500/20',
-  white:    'bg-white/8       text-white        border-white/15',
-  cyan:     'bg-cyan-500/10   text-cyan-400    border-cyan-500/20',
-  purple:   'bg-purple-500/10 text-purple-400  border-purple-500/20',
-  blue:     'bg-blue-500/10   text-blue-400    border-blue-500/20',
+  default:  'bg-gray-50    text-gray-500   border-gray-200',
+  orange:   'bg-orange-50  text-orange-600 border-orange-200',
+  green:    'bg-green-50   text-green-700  border-green-200',
+  red:      'bg-red-50     text-red-600    border-red-200',
+  white:    'bg-white      text-gray-700   border-gray-200',
+  cyan:     'bg-cyan-50    text-cyan-700   border-cyan-200',
+  purple:   'bg-violet-50  text-violet-600 border-violet-200',
+  blue:     'bg-blue-50    text-blue-600   border-blue-200',
 };
 
 export function Badge({ children, variant = 'default', className }) {

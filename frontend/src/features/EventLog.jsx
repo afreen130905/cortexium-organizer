@@ -22,7 +22,7 @@ export function EventLog({ events }) {
           <ScrollText className="w-5 h-5 text-slate-400 mr-2" />
           <h2 className="text-lg font-semibold text-slate-200">System Event Log</h2>
         </div>
-        <span className="text-xs text-slate-500 font-mono">Live</span>
+        <span className="text-xs text-slate-400 font-mono">Live</span>
       </div>
       
       <div className="flex-1 overflow-auto pr-2 custom-scrollbar space-y-3">
@@ -38,12 +38,12 @@ export function EventLog({ events }) {
               <div className="mt-0.5">{getIcon(event.type)}</div>
               <div className="flex-1">
                 <p className="text-slate-300">{event.message}</p>
-                <p className="text-xs text-slate-500 mt-1 font-mono">{event.timestamp}</p>
+                <p className="text-xs text-slate-400 mt-1 font-mono">{event.timestamp}</p>
               </div>
             </div>
           ))
         ) : (
-          <div className="text-center text-slate-500 py-8 text-sm">
+          <div className="text-center text-slate-400 py-8 text-sm">
             Waiting for system events...
           </div>
         )}

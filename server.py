@@ -561,16 +561,22 @@ def get_dashboard():
         "recall": 0.0,
         "f1Score": 0.0,
         "cvScore": 0.0,
+        "confusionMatrix": [],
+        "classes": [],
+        "featureImportance": {},
     }
     try:
         with open(METRICS_PATH, "r") as f:
             raw = json.load(f)
         metrics_data = {
-            "accuracy": raw.get("accuracy", 0.0),
-            "precision": raw.get("precision", 0.0),
-            "recall": raw.get("recall", 0.0),
-            "f1Score": raw.get("f1_score", 0.0),          # snake → camelCase
-            "cvScore": raw.get("cross_val_mean", 0.0),    # snake → camelCase
+            "accuracy":          raw.get("accuracy", 0.0),
+            "precision":         raw.get("precision", 0.0),
+            "recall":            raw.get("recall", 0.0),
+            "f1Score":           raw.get("f1_score", 0.0),
+            "cvScore":           raw.get("cross_val_mean", 0.0),
+            "confusionMatrix":   raw.get("confusion_matrix", []),
+            "classes":           raw.get("classes", []),
+            "featureImportance": raw.get("feature_importance", {}),
         }
         last_retrain_time = raw.get("last_retrain_time", "Unknown")
     except (FileNotFoundError, json.JSONDecodeError):
