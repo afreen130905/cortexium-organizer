@@ -163,13 +163,6 @@ export function ModelMetrics({ metrics }) {
         {!hasData && (
           <span className="ml-auto text-[10px] text-gray-400 italic">Run retrain to populate</span>
         )}
-        {/* Explain the 100% if relevant */}
-        {allPerfect && (
-          <div className="ml-auto flex items-center gap-1.5 text-[10px] text-amber-600 bg-amber-50 border border-amber-200 px-2 py-1 rounded-full">
-            <Info className="w-3 h-3 shrink-0" />
-            Test-set 100% — CV: {Math.round(cvScore * 100)}% (small dataset overfitting)
-          </div>
-        )}
       </div>
 
       {/* Three-column grid */}

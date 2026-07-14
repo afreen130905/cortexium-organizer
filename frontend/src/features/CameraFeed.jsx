@@ -2,7 +2,7 @@ import React, { useRef, useCallback } from 'react';
 import { GlassCard } from '../components/GlassCard';
 import { Maximize2, Minimize2, VideoOff } from 'lucide-react';
 
-export function CameraFeed({ streamUrl, isConnected }) {
+export function CameraFeed({ streamUrl, isConnected, mode, cameraStatus, modelStatus }) {
   const containerRef = useRef(null);
   const [isFullscreen, setIsFullscreen] = React.useState(false);
 
@@ -81,6 +81,60 @@ export function CameraFeed({ streamUrl, isConnected }) {
           </>
         )}
       </div>
+
+      <div className="flex items-center justify-center gap-2 pt-4 border-t border-white/10">
+
+      {/* Mode */}
+      <div
+        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-medium ${
+          mode === "learn"
+            ? "bg-white/10 border-white/10 text-slate-200"
+            : "bg-white/10 border-white/10 text-slate-200"
+        }`}
+      >
+        <span
+          className={`w-1.5 h-1.5 rounded-full ${
+            mode === "learn" ? "bg-orange-400" : "bg-slate-300"
+          }`}
+        />
+        {mode === "learn" ? "Learn Mode" : "Predict Mode"}
+      </div>
+
+      {/* Camera */}
+      <div
+        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-medium ${
+          cameraStatus === "Connected"
+            ? "bg-white/10 border-white/10 text-slate-200"
+            : "bg-white/10 border-white/10 text-slate-200"
+        }`}
+      >
+        <span
+          className={`w-1.5 h-1.5 rounded-full ${
+            cameraStatus === "Connected" ? "bg-green-400" : "bg-red-400"
+          }`}
+        />
+        Camera {cameraStatus}
+      </div>
+
+      {/* Model */}
+      <div
+        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-medium ${
+          modelStatus === "Training"
+            ? "bg-white/10 border-white/10 text-slate-200"
+            : "bg-white/10 border-white/10 text-slate-200"
+        }`}
+      >
+        <span
+          className={`w-1.5 h-1.5 rounded-full ${
+            modelStatus === "Training"
+              ? "bg-orange-400 animate-pulse"
+              : "bg-cyan-400"
+          }`}
+        />
+        Model {modelStatus}
+      </div>
+
+    </div>
     </GlassCard>
   );
 }

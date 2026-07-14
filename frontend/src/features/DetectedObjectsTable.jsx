@@ -5,13 +5,13 @@ import { ScanSearch } from 'lucide-react';
 function StatusDot({ status }) {
   if (status === 'Correct') {
     return (
-      <span className="inline-flex items-center gap-1.5 text-green-700 text-xs font-medium">
+      <span className="inline-flex items-center gap-1 text-green-700 text-xs font-medium">
         <span className="w-1.5 h-1.5 rounded-full bg-green-500" /> Correct
       </span>
     );
   }
   return (
-    <span className="inline-flex items-center gap-1.5 text-red-600 text-xs font-medium">
+    <span className="inline-flex items-center gap-1 text-red-600 text-xs font-medium">
       <span className="w-1.5 h-1.5 rounded-full bg-red-500" /> Misplaced
     </span>
   );
@@ -20,7 +20,7 @@ function StatusDot({ status }) {
 export function DetectedObjectsTable({ objects }) {
   return (
     <GlassCard className="flex flex-col h-full" accent="#f97316">
-      <div className="flex items-center gap-2 mb-4">
+      <div className="flex items-center gap-1 mb-4">
         <ScanSearch className="w-4 h-4 text-orange-500" />
         <span className="text-sm font-semibold text-slate-100">Detected Objects</span>
         {objects?.length > 0 && (
@@ -47,10 +47,10 @@ export function DetectedObjectsTable({ objects }) {
               {objects.map((obj, i) => (
                 <tr key={i} className="fade-in transition-colors hover:bg-black/[0.02]"
                   style={{ borderBottom: '1px solid rgba(0,0,0,0.04)' }}>
-                  <td className="py-2.5 pr-2 font-medium text-slate-100 capitalize">{obj.name}</td>
-                  <td className="py-2.5 pr-2 text-orange-500 capitalize">{obj.currentSurface}</td>
-                  <td className="py-2.5 pr-2 text-slate-400 capitalize">{obj.predictedSurface}</td>
-                  <td className="py-2.5 pr-2 text-right">
+                  <td className="py-0.5 pr-2 font-medium text-slate-100 capitalize">{obj.name}</td>
+                  <td className="py-0.5 pr-2 text-orange-500 capitalize">{obj.currentSurface}</td>
+                  <td className="py-0.5 pr-2 text-slate-400 capitalize">{obj.predictedSurface}</td>
+                  <td className="py-0.5 pr-2 text-right">
                     <div className="flex items-center justify-end gap-1.5">
                       <div className="w-12 h-1.5 rounded-full overflow-hidden" style={{ background: 'rgba(0,0,0,0.07)' }}>
                         <div
@@ -63,7 +63,7 @@ export function DetectedObjectsTable({ objects }) {
                       </span>
                     </div>
                   </td>
-                  <td className="py-2.5 text-right">
+                  <td className="py-1 text-right">
                     <StatusDot status={obj.status} />
                   </td>
                 </tr>
@@ -71,7 +71,7 @@ export function DetectedObjectsTable({ objects }) {
             </tbody>
           </table>
         ) : (
-          <div className="flex flex-col items-center justify-center h-full gap-2 text-gray-300">
+          <div className="flex flex-col items-center justify-center h-full gap-1 text-gray-300">
             <ScanSearch className="w-8 h-8 opacity-30" />
             <p className="text-xs text-gray-400">No objects detected</p>
           </div>

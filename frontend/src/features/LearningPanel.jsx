@@ -4,7 +4,7 @@ import { BrainCircuit } from 'lucide-react';
 
 function StatRow({ label, value, accentClass }) {
   return (
-    <div className="flex items-center justify-between py-2.5" style={{ borderBottom: '1px solid rgba(0,0,0,0.05)' }}>
+    <div className="flex items-center justify-between py-1.5" style={{ borderBottom: '1px solid rgba(0,0,0,0.05)' }}>
       <span className="text-xs text-slate-400">{label}</span>
       <span className={`text-sm font-semibold tabular-nums ${accentClass || 'text-slate-100'}`}>
         {value ?? '—'}
@@ -24,11 +24,11 @@ export function LearningPanel({ learningData, modelStatus }) {
     <GlassCard className="flex flex-col">
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1">
           <BrainCircuit className="w-4 h-4 text-slate-300" />
           <span className="text-sm font-semibold text-slate-100">Adaptive Learning</span>
         </div>
-        <span className={`flex items-center gap-1.5 text-[10px] font-medium px-2 py-0.5 rounded-full border ${
+        <span className={`flex items-center gap-1 text-[10px] font-medium px-2 py-0.5 rounded-full border ${
           isTraining
             ? 'bg-orange-50 border-orange-200 text-orange-600'
             : 'bg-gray-50 border-gray-200 text-slate-400'

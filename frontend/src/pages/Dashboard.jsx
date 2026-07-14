@@ -69,7 +69,7 @@ export function Dashboard() {
   const streamUrl    = '/api/camera/stream';
 
   return (
-    <DashboardLayout mode={headerMode} cameraStatus={cameraStatus} modelStatus={modelStatus}>
+    <DashboardLayout mode={headerMode} cameraStatus={cameraStatus} modelStatus={modelStatus} controls={<Controls onAction={handleControlAction} mode={mode} cameraActive={cameraActive}/>}>
       <div className="flex flex-col gap-5">
 
         {/* ── Connection banner ── */}
@@ -92,28 +92,38 @@ export function Dashboard() {
           </div>
         )}
 
-        {/* ── Controls bar ── */}
-        <div className="flex items-center gap-4">
-          <Controls onAction={handleControlAction} mode={mode} cameraActive={cameraActive} />
-        </div>
+        
 
         {/* ══════════════════════════════════════════
             SECTION 1 — Two-column live application
-            Left: 65%   Right: 35%
+            Left: 60%   Right: 40%
         ══════════════════════════════════════════ */}
-        <div className="grid grid-cols-1 xl:grid-cols-[65%_35%] gap-4">
+        <div className="grid grid-cols-1 xl:grid-cols-[60%_40%] gap-4">
 
-          {/* ════ LEFT COLUMN (65%) ════ */}
+          {/* ════ LEFT COLUMN (60%) ════ */}
           <div className="flex flex-col gap-4">
 
             {/* 1. Camera feed — largest element */}
-            <div style={{ minHeight: '360px', maxHeight: '520px', flex: '1 1 auto' }}>
+            <div
+              style={{
+                height: "550px",
+                flexShrink: 0
+              }}
+            >              
               <CameraFeed
                 isConnected={connected && cameraActive}
                 streamUrl={streamUrl}
+                mode={mode}
+                cameraStatus={cameraStatus}
+                modelStatus={modelStatus}
               />
             </div>
 
+            
+          </div>
+
+          {/* ════ RIGHT COLUMN (35%) ════ */}
+          <div className="flex flex-col gap-4">
             {/* 2. Misplaced / prediction panel */}
             <div className="shrink-0">
               <PredictionPanel
@@ -122,10 +132,6 @@ export function Dashboard() {
                 connected={connected}
               />
             </div>
-          </div>
-
-          {/* ════ RIGHT COLUMN (35%) ════ */}
-          <div className="flex flex-col gap-4">
 
             {/* 1. Detected objects table */}
             <div className="flex-1" style={{ minHeight: '220px' }}>

@@ -2,7 +2,7 @@ import React from 'react';
 import { Header } from '../features/Header';
 import { Footer } from '../features/Footer';
 
-export function DashboardLayout({ children, mode, cameraStatus, modelStatus }) {
+export function DashboardLayout({ children, mode, cameraStatus, modelStatus, controls }) {
   return (
     <div className="min-h-screen flex flex-col relative" 
       style={{ background: `
@@ -21,7 +21,7 @@ export function DashboardLayout({ children, mode, cameraStatus, modelStatus }) {
       filter:'blur(130px)'
       }}/>
 
-      <Header mode={mode} cameraStatus={cameraStatus} modelStatus={modelStatus} />
+      <Header mode={mode} cameraStatus={cameraStatus} modelStatus={modelStatus} controls={controls}/>
 
       <main className="flex-1 p-4 lg:p-5 overflow-auto">
         <div className="max-w-screen-2xl mx-auto h-full">

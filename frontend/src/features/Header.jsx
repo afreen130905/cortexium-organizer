@@ -1,7 +1,7 @@
 import React from 'react';
 import { Brain, Clock } from 'lucide-react';
 
-export function Header({ mode = 'Predict', cameraStatus = 'Disconnected', modelStatus = 'Ready' }) {
+export function Header({ mode = 'Predict', cameraStatus = 'Disconnected', modelStatus = 'Ready', controls  }) {
   const [time, setTime] = React.useState(new Date());
 
   React.useEffect(() => {
@@ -35,37 +35,9 @@ export function Header({ mode = 'Predict', cameraStatus = 'Disconnected', modelS
         </div>
       </div>
 
-      {/* Status pills */}
-      <div className="flex items-center gap-2">
-        {/* Mode */}
-        <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-medium transition-colors backdrop-blur-md ${
-        isLearn
-          ? 'bg-orange-500/20 border-orange-400/30 text-orange-200'
-          : 'bg-white/10 border-white/10 text-slate-200'
-          }`}>
-          <span className={`w-1.5 h-1.5 rounded-full ${isLearn ? 'bg-orange-400' : 'bg-slate-300'}`} />
-          {mode} Mode
-        </div>
-
-        {/* Camera */}
-        <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-medium ${
-          isCamOn
-            ? 'bg-green-500/20 border-green-400/30 text-green-200'
-            : 'bg-white/10 border-white/10 text-slate-200'
-          }`}>
-          <span className={`w-1.5 h-1.5 rounded-full ${isCamOn ? 'dot-live' : 'bg-gray-300'}`} />
-          Camera {cameraStatus}
-        </div>
-
-        {/* Model */}
-        <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-medium ${
-          isTraining
-            ? 'bg-orange-500/20 border-orange-400/30 text-orange-200'
-            : 'bg-white/10 border-white/10 text-slate-200'
-          }`}>
-          <span className={`w-1.5 h-1.5 rounded-full ${isTraining ? 'bg-orange-400 animate-pulse' : 'bg-gray-300'}`} />
-          {modelStatus}
-        </div>
+      {/*Controls*/}
+      <div className="flex-1 flex justify-center">
+        {controls}
       </div>
 
       {/* Clock */}
